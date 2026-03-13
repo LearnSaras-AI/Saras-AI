@@ -350,6 +350,10 @@ async function explainReaction(){
   const result = document.getElementById("result");
 
   currentQuestion = input;
+  gtag('event', 'student_question', {
+  question: input,
+  subject: subject
+});
 
   if(!input) return alert("Enter a question!");
 
@@ -423,7 +427,7 @@ Question: ${input}
 }
 
 // Practice Mode
-async function generatePracticeQuestions(){
+async function generatePracticeQuestions(){ gtag('event','practice_mode_used');
   const subject = document.getElementById("practiceSubject").value;
   const difficulty = document.getElementById("practiceDifficulty").value;
   const box = document.getElementById("practiceOutput");
@@ -717,6 +721,7 @@ function saveToHistory(question, answer){
 </a>
 </body>
 </html>
+
 
 
 
