@@ -154,9 +154,7 @@ margin-bottom:15px;
 </select>
 
 <button onclick="explainReaction()">Explain</button>
-  <button onclick="deepDiveExplain()" style="background:#6366f1;">
-  🌊 Deep Dive
-</button>
+
 <div id="result" class="output" style="display:none;"></div>
 <button onclick="getDetailedAnswer()" id="detailBtn" style="margin-top:10px; display:none;">
   View Detailed Answer
@@ -278,6 +276,16 @@ margin-bottom:15px;
 </div>
 <!-- DEEP DIVE -->
 <div id="page-premium" class="page">
+  <h2>🌊 Deep Dive</h2>
+
+  <textarea id="deepInput" rows="3" placeholder="Enter topic for deep understanding"></textarea>
+
+  <button onclick="deepDiveExplain()" style="background:#6366f1;">
+    Start Deep Dive
+  </button>
+
+  <div id="deepResult" class="output" style="display:none;"></div>
+</div>
 <h2>🌊 Deep Dive</h2>
 <p style="
   font-size:14px;
@@ -736,9 +744,9 @@ function saveToHistory(question, answer){
   loadSaved();
 }
   async function deepDiveExplain(){
-  const input = document.getElementById("reactionInput").value.trim();
+  const input = document.getElementById("deepInput").value.trim();
   const subject = document.getElementById("subject").value;
-  const result = document.getElementById("result");
+const result = document.getElementById("deepResult");
 
   if(!input) return alert("Enter a topic!");
 
