@@ -86,6 +86,14 @@ th{background:#e6e9ff;}
 .feedback-btn:hover{
   background:#4f46e5;
 }
+  h3{
+  margin-top:14px;
+  color:#1f2937;
+}
+
+.section h2{
+  margin-bottom:10px;
+}
 </style>
   <!-- MathJax for Physics & Chemistry notation -->
   <script>
@@ -146,6 +154,9 @@ margin-bottom:15px;
 </select>
 
 <button onclick="explainReaction()">Explain</button>
+  <button onclick="deepDiveExplain()" style="background:#6366f1;">
+  🌊 Deep Dive
+</button>
 <div id="result" class="output" style="display:none;"></div>
 <button onclick="getDetailedAnswer()" id="detailBtn" style="margin-top:10px; display:none;">
   View Detailed Answer
@@ -723,6 +734,63 @@ function saveToHistory(question, answer){
 
   localStorage.setItem("todayHistory", JSON.stringify(history));
   loadSaved();
+}
+  async function deepDiveExplain(){
+  const input = document.getElementById("reactionInput").value.trim();
+  const subject = document.getElementById("subject").value;
+  const result = document.getElementById("result");
+
+  if(!input) return alert("Enter a topic!");
+
+  result.style.display = "block";
+  result.innerHTML = `<div class="typing">🌊 Deep diving into concept...</div>`;
+
+  const prompt = `
+Subject: ${subject}
+Topic: ${input}
+
+Explain in this EXACT structure:
+
+1. 📌 Reaction / Concept
+2. ⚙️ Step-by-step Mechanism
+3. 🧠 Why each step happens (reasoning)
+4. 📊 Kinetics (rate, order, conditions)
+5. ⚠️ Common mistakes students make
+6. 🎯 Exam tips / traps
+
+Keep it clear, structured, and easy to revise.
+`;
+
+  try{
+    const r = await fetch("https://smart-backend-82s8.onrender.com/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:prompt})
+    });
+
+    const j = await r.json();
+    let raw = j.reply || "No response.";
+
+    raw = cleanChemistry(raw);
+    raw = fixPhysicsSymbols(raw);
+
+    let html = marked.parse(raw);
+
+    html = html.replace(
+      /(📌|⚙️|🧠|📊|⚠️|🎯)/g,
+      `<h3>$1</h3>`
+    );
+
+    result.innerHTML = `
+      <div class="section">
+        <h2>🌊 Deep Dive</h2>
+        ${html}
+      </div>
+    `;
+
+  }catch{
+    result.innerHTML = "Error in Deep Dive ❌";
+  }
 }
 </script>
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSd8v7hIEvgaOMsp5l_egxC9mYg5_tl6N87i6OcLd9lPoEKoTA/viewform"
