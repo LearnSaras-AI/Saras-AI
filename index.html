@@ -276,15 +276,15 @@ margin-bottom:15px;
 </div>
 <!-- DEEP DIVE -->
 <div id="page-premium" class="page">
-  <h2>🌊 Deep Dive</h2>
+<h2>🌊 Deep Dive</h2>
 
-  <textarea id="deepInput" rows="3" placeholder="Enter topic for deep understanding"></textarea>
+<textarea id="deepInput" rows="3" placeholder="Enter topic for deep understanding"></textarea>
 
-  <button onclick="deepDiveExplain()" style="background:#6366f1;">
-    Start Deep Dive
-  </button>
+<button onclick="deepDiveExplain()" style="background:#6366f1;">
+  Start Deep Dive
+</button>
 
-  <div id="deepResult" class="output" style="display:none;"></div>
+<div id="deepResult" class="output" style="display:none;"></div>
 </div>
 <h2>🌊 Deep Dive</h2>
 <p style="
@@ -757,16 +757,20 @@ const result = document.getElementById("deepResult");
 Subject: ${subject}
 Topic: ${input}
 
-Explain in this EXACT structure:
+const prompt = `
+Subject: ${subject}
+Topic: ${input}
 
-1. 📌 Reaction / Concept
-2. ⚙️ Step-by-step Mechanism
-3. 🧠 Why each step happens (reasoning)
-4. 📊 Kinetics (rate, order, conditions)
-5. ⚠️ Common mistakes students make
-6. 🎯 Exam tips / traps
+Provide a deep explanation in this structured format:
 
-Keep it clear, structured, and easy to revise.
+📌 Reaction / Concept  
+⚙️ Mechanism (step-by-step)  
+🧠 Reasoning behind each step  
+📊 Kinetics (rate, order, conditions)  
+⚠️ Common mistakes  
+🎯 Exam tips  
+
+Do NOT include instructions. Start directly from explanation.
 `;
 
   try{
