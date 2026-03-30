@@ -290,6 +290,13 @@ margin-bottom:15px;
 <div id="page-applied" class="page">
 
   <h2>🌍 Applied Science</h2>
+  <div class="section" style="border-left-color:#f59e0b;">
+  <strong>🔥 Trending Today</strong>
+  <p id="trendingTopic" style="margin-top:6px;">Loading...</p>
+  <button onclick="exploreTrending()" style="background:#f59e0b;">
+    Explore Now
+  </button>
+</div>
 <p style="font-size:14px; color:#555;">
   Learn where and how your concepts are applied
   <br><br>
@@ -673,6 +680,7 @@ loadSaved();
 // 🔥 Trigger Home logic once on initial load
 const firstHomeTab = document.querySelector(".nav-item");
 switchPage("home", firstHomeTab);
+  loadTrending();
 function toggleUnitConverter(){
   const box = document.getElementById("unitConverterBox");
   box.style.display = box.style.display === "none" ? "block" : "none";
@@ -861,6 +869,29 @@ Do NOT include instructions. Start directly from explanation.
   }catch{
     result.innerHTML = "Error loading applications ❌";
   }
+}
+  const trendingList = [
+  "AI in Medicine",
+  "Quantum Computing",
+  "CRISPR Gene Editing",
+  "Electric Vehicles Battery Tech",
+  "Nanotechnology in Drug Delivery",
+  "SpaceX Reusable Rockets",
+  "Climate Change Solutions",
+  "Neural Networks Basics",
+  "Fusion Energy",
+  "Biodegradable Plastics"
+];
+
+function loadTrending(){
+  const topic = trendingList[Math.floor(Math.random() * trendingList.length)];
+  document.getElementById("trendingTopic").innerText = topic;
+}
+
+function exploreTrending(){
+  const topic = document.getElementById("trendingTopic").innerText;
+  document.getElementById("appliedInput").value = topic;
+  appliedScienceExplain();
 }
 </script>
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSd8v7hIEvgaOMsp5l_egxC9mYg5_tl6N87i6OcLd9lPoEKoTA/viewform"
