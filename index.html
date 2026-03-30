@@ -286,6 +286,23 @@ margin-bottom:15px;
 
 <div id="deepResult" class="output" style="display:none;"></div>
 </div>
+  <!-- APPLIED SCIENCE -->
+<div id="page-applied" class="page">
+
+  <h2>🌍 Applied Science</h2>
+  <p style="font-size:14px; color:#555;">
+    Learn where and how your concepts are applied
+  </p>
+
+  <textarea id="appliedInput" rows="3" placeholder="Enter a concept or topic"></textarea>
+
+  <button onclick="appliedScienceExplain()" style="background:#10b981;">
+    Explore Applications
+  </button>
+
+  <div id="appliedResult" class="output" style="display:none;"></div>
+
+</div>
 
 <!-- NAV -->
 <div class="navbar">
@@ -294,7 +311,7 @@ margin-bottom:15px;
   <div class="nav-item" onclick="switchPage('saved',this)">💾 Saved</div>
   <div class="nav-item" onclick="switchPage('guide',this)">📘 Guide</div>
   <div class="nav-item" onclick="switchPage('premium',this)">🌊 Deep Dive</div>
-
+  <div class="nav-item" onclick="switchPage('applied',this)">🌍 Applied</div>
 </div>
 
 <script>
@@ -789,6 +806,59 @@ Do NOT include instructions. Start directly from explanation.
 
   }catch{
     result.innerHTML = "Error in Deep Dive ❌";
+  }
+}
+  async function appliedScienceExplain(){
+  const input = document.getElementById("appliedInput").value.trim();
+  const subject = document.getElementById("subject").value;
+  const result = document.getElementById("appliedResult");
+
+  if(!input) return alert("Enter a topic!");
+
+  result.style.display = "block";
+  result.innerHTML = `<div class="typing">🌍 Exploring real-world applications...</div>`;
+
+  const prompt = `
+Subject: ${subject}
+Topic: ${input}
+
+Explain in this structure:
+
+🌍 Real World Applications  
+🔬 Recent Research / Developments  
+💡 Why This Matters  
+
+Do NOT include instructions. Start directly from explanation.
+`;
+
+  try{
+    const r = await fetch("https://smart-backend-82s8.onrender.com/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:prompt})
+    });
+
+    const j = await r.json();
+    let raw = j.reply || "No response.";
+
+    raw = cleanChemistry(raw);
+    raw = fixPhysicsSymbols(raw);
+
+    let html = marked.parse(raw);
+
+    html = html.replace(
+      /(🌍|🔬|💡)/g,
+      `<h3>$1</h3>`
+    );
+
+    result.innerHTML = `
+      <div class="section">
+        ${html}
+      </div>
+    `;
+
+  }catch{
+    result.innerHTML = "Error loading applications ❌";
   }
 }
 </script>
