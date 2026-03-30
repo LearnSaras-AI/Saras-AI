@@ -810,7 +810,7 @@ Do NOT include instructions. Start directly from explanation.
 }
   async function appliedScienceExplain(){
   const input = document.getElementById("appliedInput").value.trim();
-  const subject = document.getElementById("subject").value;
+  const subject = "General Science";
   const result = document.getElementById("appliedResult");
 
   if(!input) return alert("Enter a topic!");
@@ -846,10 +846,10 @@ Do NOT include instructions. Start directly from explanation.
 
     let html = marked.parse(raw);
 
-    html = html.replace(
-      /(🌍|🔬|💡)/g,
-      `<h3>$1</h3>`
-    );
+ html = html.replace(
+  /(🌍 Real World Applications|🔬 Recent Research \/ Developments|💡 Why This Matters)/g,
+  `<h3>$1</h3>`
+);
 
     result.innerHTML = `
       <div class="section">
