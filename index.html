@@ -345,6 +345,9 @@ if (pg === "practice" && !sessionStorage.getItem("practiceNoteShown")) {
     if (p) p.style.display = "block";
     sessionStorage.setItem("practiceNoteShown", "yes");
   }, 50);
+  if(pg === "applied"){
+  loadTrending();
+}
  }
 }
 
@@ -680,7 +683,7 @@ loadSaved();
 // 🔥 Trigger Home logic once on initial load
 const firstHomeTab = document.querySelector(".nav-item");
 switchPage("home", firstHomeTab);
-  loadTrending();
+
 function toggleUnitConverter(){
   const box = document.getElementById("unitConverterBox");
   box.style.display = box.style.display === "none" ? "block" : "none";
@@ -890,12 +893,16 @@ function loadTrending(){
 
 function exploreTrending(){
   const topic = document.getElementById("trendingTopic").innerText;
+
+  if(topic === "Loading..." || !topic){
+    alert("Wait a second, loading topic...");
+    return;
+  }
+
   document.getElementById("appliedInput").value = topic;
   appliedScienceExplain();
 }
-  document.addEventListener("DOMContentLoaded", function () {
-  loadTrending();
-});
+
 </script>
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSd8v7hIEvgaOMsp5l_egxC9mYg5_tl6N87i6OcLd9lPoEKoTA/viewform"
    target="_blank"
