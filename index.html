@@ -345,12 +345,11 @@ if (pg === "practice" && !sessionStorage.getItem("practiceNoteShown")) {
     if (p) p.style.display = "block";
     sessionStorage.setItem("practiceNoteShown", "yes");
   }, 50);
+ }
   if(pg === "applied"){
   loadTrending();
+  }
 }
- }
-}
-
 // Cleaner (safe for tables)
 function cleanChemistry(txt){
   return txt
