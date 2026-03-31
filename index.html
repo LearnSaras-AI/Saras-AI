@@ -912,7 +912,14 @@ Only plain text explanation. Nothing else.
 
     const j = await r.json();
     let raw = j.reply || "No insight.";
-    raw = raw.replace(/Question:.*|Correct Answer:.*|Mistake Insight:.*/gi, "");
+    raw = raw
+  .replace(/Question:.*?(?=Correct Answer:|$)/gi, "")
+  .replace(/Correct Answer:.*?(?=Mistake Insight:|$)/gi, "")
+  .replace(/Mistake Insight:.*$/gi, "")
+  .replace(/Topic:.*?(?=Correct Answer:|$)/gi, "")
+  .replace(/^\d+\.\s*/, "") // remove "1. "
+  .trim();
+    raw = raw.split("Correct Answer:").pop();
 
     raw = cleanChemistry(raw);
     raw = fixPhysicsSymbols(raw);
