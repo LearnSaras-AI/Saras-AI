@@ -885,16 +885,22 @@ async function loadScienceInsight(){
 
   box.innerHTML = "🔬 Loading today's insight...";
 
-  const prompt = `
-Give one interesting science insight related to Chemistry, Physics, or Biology.
+const prompt = `
+Give ONLY a short science insight.
 
-Make it:
+STRICT RULES:
+- Do NOT generate questions
+- Do NOT include "Question", "Answer", or "Mistake"
+- Do NOT follow any exam format
+- Just explain one interesting real-world concept
+
+STYLE:
 - 3 to 4 lines
-- simple and engaging
-- real-world based
+- simple, engaging
+- like a science magazine
 
-Do NOT include headings.
-Do NOT include instructions.
+OUTPUT:
+Only plain text explanation. Nothing else.
 `;
 
   try{
@@ -906,6 +912,7 @@ Do NOT include instructions.
 
     const j = await r.json();
     let raw = j.reply || "No insight.";
+    raw = raw.replace(/Question:.*|Correct Answer:.*|Mistake Insight:.*/gi, "");
 
     raw = cleanChemistry(raw);
     raw = fixPhysicsSymbols(raw);
