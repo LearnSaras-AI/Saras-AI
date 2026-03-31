@@ -886,21 +886,20 @@ async function loadScienceInsight(){
   box.innerHTML = "🔬 Loading today's insight...";
 
 const prompt = `
-Give ONLY a short science insight.
+Give one interesting science insight.
 
 STRICT RULES:
-- Do NOT generate questions
-- Do NOT include "Question", "Answer", or "Mistake"
-- Do NOT follow any exam format
-- Just explain one interesting real-world concept
+- Do NOT use labels like "Question", "Answer", or "Mistake Insight"
+- Include a common misconception naturally in the explanation
+- Correct it in a simple way
 
 STYLE:
 - 3 to 4 lines
-- simple, engaging
-- like a science magazine
+- engaging, like a science article
+- conversational tone
 
 OUTPUT:
-Only plain text explanation. Nothing else.
+Only plain explanation, no labels
 `;
 
   try{
