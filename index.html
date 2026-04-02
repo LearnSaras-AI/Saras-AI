@@ -291,12 +291,8 @@ margin-bottom:15px;
 
   <h2>🌍 Applied Science</h2>
 <div class="section" style="border-left-color:#ef4444;">
-  <strong>🔥 Today’s Science Insight</strong>
-  <div id="scienceInsight" style="margin-top:8px;">Loading...</div>
-
-  <button onclick="exploreInsight()" style="background:#ef4444; margin-top:10px;">
-    Explore More
-  </button>
+  <strong>🔥 Today’s Science Insights</strong>
+  <div id="scienceInsights" style="margin-top:10px;">Loading...</div>
 </div>
 <p style="font-size:14px; color:#555;">
   Learn where and how your concepts are applied
@@ -324,16 +320,18 @@ margin-bottom:15px;
 </div>
 
 <script>
-  let currentQuestion = "";
-  let currentInsight = "";
+let currentQuestion = "";
+let currentInsights = [];
 function switchPage(pg, el){
   document.querySelectorAll(".page").forEach(p => p.style.display = "none");
   document.getElementById("page-" + pg).style.display = "block";
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   el.classList.add("active");
 if(pg === "applied"){
-  loadScienceInsight();
+    loadScienceInsights();
+  }
 }
+  
   // ✅ Show manifesto ONLY when Home becomes active
   if (pg === "home" && !sessionStorage.getItem("manifestoShown")) {
     setTimeout(() => {
@@ -938,6 +936,93 @@ function exploreInsight(){
   }
 
   document.getElementById("appliedInput").value = currentInsight;
+  appliedScienceExplain();
+}
+  async function loadScienceInsights(){
+  const box = document.getElementById("scienceInsights");
+  if(!box) return;
+
+  const today = new Date().toDateString();
+
+  const saved = JSON.parse(localStorage.getItem("dailyInsights"));
+
+  // ✅ USE CACHE IF SAME DAY
+  if(saved && saved.date === today){
+    currentInsights = saved.data;
+    renderInsights(currentInsights);
+    return;
+  }
+
+  box.innerHTML = "🔬 Loading today's insights...";
+
+  const prompt = `
+Give EXACTLY 5 short science insights.
+
+Rules:
+- Each insight must be 2–3 lines
+- Include real-world concept
+- Include a common misconception naturally
+- Do NOT use labels like Question/Answer/Mistake
+- Keep tone engaging like a science article
+- Separate each insight with "---"
+
+Output ONLY the insights.
+`;
+
+  try{
+    const r = await fetch("https://smart-backend-82s8.onrender.com/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:prompt})
+    });
+
+    const j = await r.json();
+    let raw = j.reply || "";
+
+    raw = cleanChemistry(raw);
+    raw = fixPhysicsSymbols(raw);
+
+    // 🔥 SPLIT INTO 5
+    let insights = raw.split("---").map(x => x.trim()).filter(x => x);
+
+    currentInsights = insights;
+
+    // ✅ SAVE CACHE
+    localStorage.setItem("dailyInsights", JSON.stringify({
+      date: today,
+      data: insights
+    }));
+
+    renderInsights(insights);
+
+  }catch{
+    box.innerHTML = "Unable to load insights ❌";
+  }
+}
+  function renderInsights(insights){
+  const box = document.getElementById("scienceInsights");
+
+  box.innerHTML = insights.map((ins, i) => `
+    <div class="section" style="margin-top:10px;">
+      <strong>Insight ${i+1}</strong>
+      <p style="margin-top:6px;">${ins}</p>
+
+      <button onclick="exploreInsight(${i})" 
+        style="margin-top:8px; background:#6366f1;">
+        Explore More
+      </button>
+    </div>
+  `).join("");
+}
+  function exploreInsight(index){
+  const insight = currentInsights[index];
+
+  if(!insight){
+    alert("Insight not ready");
+    return;
+  }
+
+  document.getElementById("appliedInput").value = insight;
   appliedScienceExplain();
 }
 </script>
