@@ -330,7 +330,6 @@ function switchPage(pg, el){
 if(pg === "applied"){
     loadScienceInsights();
   }
-}
   
   // ✅ Show manifesto ONLY when Home becomes active
   if (pg === "home" && !sessionStorage.getItem("manifestoShown")) {
@@ -348,9 +347,6 @@ if (pg === "practice" && !sessionStorage.getItem("practiceNoteShown")) {
     sessionStorage.setItem("practiceNoteShown", "yes");
   }, 50);
  }
-  if(pg === "applied"){
-
-  }
 }
 // Cleaner (safe for tables)
 function cleanChemistry(txt){
