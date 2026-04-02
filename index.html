@@ -874,61 +874,7 @@ Do NOT include instructions. Start directly from explanation.
     result.innerHTML = "Error loading applications ❌";
   }
 }
-
-
-async function loadScienceInsight(){
-  const box = document.getElementById("scienceInsight");
-
-  if (!box) return;
-
-  box.innerHTML = "🔬 Loading today's insight...";
-
-const prompt = `
-Give one interesting science insight.
-
-STRICT RULES:
-- Do NOT use labels like "Question", "Answer", or "Mistake Insight"
-- Include a common misconception naturally in the explanation
-- Correct it in a simple way
-
-STYLE:
-- 3 to 4 lines
-- engaging, like a science article
-- conversational tone
-
-OUTPUT:
-Only plain explanation, no labels
-`;
-
-  try{
-    const r = await fetch("https://smart-backend-82s8.onrender.com/api/chat",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({message:prompt})
-    });
-
-    const j = await r.json();
-    let raw = j.reply || "No insight.";
-    raw = raw
-  .replace(/Question:.*?(?=Correct Answer:|$)/gi, "")
-  .replace(/Correct Answer:.*?(?=Mistake Insight:|$)/gi, "")
-  .replace(/Mistake Insight:.*$/gi, "")
-  .replace(/Topic:.*?(?=Correct Answer:|$)/gi, "")
-  .replace(/^\d+\.\s*/, "") // remove "1. "
-  .trim();
-    raw = raw.split("Correct Answer:").pop();
-
-    raw = cleanChemistry(raw);
-    raw = fixPhysicsSymbols(raw);
-
-    currentInsight = raw; // 🔥 store it
-
-    box.innerHTML = raw;
-
-  }catch{
-    box.innerHTML = "Unable to load insight ❌";
-  }
-}
+    
   async function loadScienceInsights(){
   const box = document.getElementById("scienceInsights");
   if(!box) return;
@@ -978,12 +924,22 @@ Output ONLY the insights.
 // 🔥 PRIMARY SPLIT
 let insights = raw.split("###").map(x => x.trim()).filter(x => x);
 
-// 🔥 SMART FALLBACK
+// 🔥 FALLBACK 1: numbered list
 if(insights.length < 5){
   insights = raw
     .split(/\d+\.\s+/)
     .map(x => x.trim())
     .filter(x => x);
+}
+
+// 🔥 FALLBACK 2: force chunking (GUARANTEED 5)
+if(insights.length < 5){
+  const chunkSize = Math.ceil(raw.length / 5);
+  insights = [];
+
+  for(let i = 0; i < 5; i++){
+    insights.push(raw.slice(i * chunkSize, (i + 1) * chunkSize).trim());
+  }
 }
 
     currentInsights = insights;
