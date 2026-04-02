@@ -929,15 +929,6 @@ Only plain explanation, no labels
     box.innerHTML = "Unable to load insight ❌";
   }
 }
-function exploreInsight(){
-  if(!currentInsight){
-    alert("Wait for insight to load...");
-    return;
-  }
-
-  document.getElementById("appliedInput").value = currentInsight;
-  appliedScienceExplain();
-}
   async function loadScienceInsights(){
   const box = document.getElementById("scienceInsights");
   if(!box) return;
@@ -984,12 +975,15 @@ Output ONLY the insights.
 
     raw = cleanChemistry(raw);
     raw = fixPhysicsSymbols(raw);
-// 🔥 SPLIT INTO 5 (CLEAN VERSION)
+// 🔥 PRIMARY SPLIT
 let insights = raw.split("###").map(x => x.trim()).filter(x => x);
 
-// fallback if AI fails separator
+// 🔥 SMART FALLBACK
 if(insights.length < 5){
-  insights = raw.split("\n\n").map(x => x.trim()).filter(x => x);
+  insights = raw
+    .split(/\d+\.\s+/)
+    .map(x => x.trim())
+    .filter(x => x);
 }
 
     currentInsights = insights;
