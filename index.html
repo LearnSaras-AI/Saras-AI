@@ -955,16 +955,19 @@ function exploreInsight(){
 
   box.innerHTML = "🔬 Loading today's insights...";
 
-  const prompt = `
+const prompt = `
 Give EXACTLY 5 short science insights.
 
 Rules:
 - Each insight must be 2–3 lines
 - Include real-world concept
 - Include a common misconception naturally
-- Do NOT use labels like Question/Answer/Mistake
-- Keep tone engaging like a science article
-- Separate each insight with "---"
+- Do NOT use labels like Question/Answer
+- Keep tone engaging
+
+IMPORTANT:
+- Separate each insight with "###"
+- Do NOT miss separators
 
 Output ONLY the insights.
 `;
@@ -981,9 +984,13 @@ Output ONLY the insights.
 
     raw = cleanChemistry(raw);
     raw = fixPhysicsSymbols(raw);
+// 🔥 SPLIT INTO 5 (CLEAN VERSION)
+let insights = raw.split("###").map(x => x.trim()).filter(x => x);
 
-    // 🔥 SPLIT INTO 5
-    let insights = raw.split("---").map(x => x.trim()).filter(x => x);
+// fallback if AI fails separator
+if(insights.length < 5){
+  insights = raw.split("\n\n").map(x => x.trim()).filter(x => x);
+}
 
     currentInsights = insights;
 
