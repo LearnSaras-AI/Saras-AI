@@ -148,6 +148,12 @@ margin-bottom:15px;
 
 <label>Choose subject:</label>
 <select id="subject">
+  <label>Language:</label>
+<select id="languageSelect">
+  <option value="English">English</option>
+  <option value="Hindi">Hindi</option>
+  <option value="Marathi">Marathi</option>
+</select>
   <option value="Chemistry">Chemistry</option>
   <option value="Physics">Physics</option>
   <option value="Biology">Biology</option>
@@ -322,6 +328,29 @@ margin-bottom:15px;
 <script>
 let currentQuestion = "";
 let currentInsights = [];
+  // 🌐 Language Setup
+document.addEventListener("DOMContentLoaded", () => {
+  const langSelect = document.getElementById("languageSelect");
+
+  const savedLang = localStorage.getItem("lang") || "English";
+
+  if(langSelect){
+    langSelect.value = savedLang;
+
+    langSelect.addEventListener("change", () => {
+      localStorage.setItem("lang", langSelect.value);
+    });
+  }
+});
+// Load saved language
+const savedLang = localStorage.getItem("lang") || "English";
+if(langSelect){
+  langSelect.value = savedLang;
+
+  langSelect.addEventListener("change", () => {
+    localStorage.setItem("lang", langSelect.value);
+  });
+}
 function switchPage(pg, el){
   document.querySelectorAll(".page").forEach(p => p.style.display = "none");
   document.getElementById("page-" + pg).style.display = "block";
@@ -412,9 +441,13 @@ async function explainReaction(){
     MathJax.typesetPromise([result]);
   }
 
-  const prompt = `
+const language = localStorage.getItem("lang") || "English";
+
+const prompt = `
 Subject: ${subject}
 Question: ${input}
+Language: ${language}
+Explain clearly in simple terms. Include a short example if useful.
 `;
 
   try {
@@ -696,12 +729,14 @@ async function getDetailedAnswer() {
 
   const subject = document.getElementById("subject").value;
 
+const language = localStorage.getItem("lang") || "English";
+
 const prompt = `
 Subject: ${subject}
 Question: ${currentQuestion}
+Language: ${language}
 
-Provide a step-by-step explanation in simple language.
-
+Explain step-by-step in simple terms.
 Do NOT repeat the question.
 Do NOT include instructions in the answer.
 Start directly with explanation.
@@ -770,9 +805,12 @@ const result = document.getElementById("deepResult");
   result.style.display = "block";
   result.innerHTML = `<div class="typing">🌊 Deep diving into concept...</div>`;
 
+const language = localStorage.getItem("lang") || "English";
+
 const prompt = `
 Subject: ${subject}
 Topic: ${input}
+Language: ${language}
 
 Provide a deep explanation in this structured format:
 
@@ -827,9 +865,12 @@ Do NOT include instructions. Start directly from explanation.
   result.style.display = "block";
   result.innerHTML = `<div class="typing">🌍 Exploring real-world applications...</div>`;
 
-  const prompt = `
+const language = localStorage.getItem("lang") || "English";
+
+const prompt = `
 Subject: ${subject}
 Topic: ${input}
+Language: ${language}
 
 Explain in this structure:
 
