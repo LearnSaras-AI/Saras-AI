@@ -145,13 +145,16 @@ margin-bottom:15px;
 </div>
 
 <textarea id="reactionInput" rows="3" placeholder="Type a reaction or question"></textarea>
+  <p style="font-size:13px; color:#666;">
+  Language: <span id="currentLang"></span>
+</p>
 
 <label>Choose subject:</label>
 <select id="subject">
   <option value="Chemistry">Chemistry</option>
   <option value="Physics">Physics</option>
   <option value="Biology">Biology</option>
-</select> <!-- ✅ THIS WAS MISSING -->
+</select> 
 
 <label>Language:</label>
 <select id="languageSelect">
@@ -711,6 +714,11 @@ function deleteSavedItem(type, index){
 }
   
 loadSaved();
+  document.addEventListener("DOMContentLoaded", () => {
+  const lang = localStorage.getItem("lang") || "English";
+  const el = document.getElementById("currentLang");
+  if(el) el.innerText = lang;
+});
 // 🔥 Trigger Home logic once on initial load
 const firstHomeTab = document.querySelector(".nav-item");
 switchPage("home", firstHomeTab);
