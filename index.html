@@ -200,6 +200,10 @@ margin-bottom:15px;
 
 <label>Select Difficulty:</label>
 <select id="practiceDifficulty">
+  <label>Select Topic:</label>
+<select id="practiceTopic">
+  <option value="All">All Topics</option>
+</select>
   <option value="Easy">Easy</option>
   <option value="Medium">Medium</option>
   <option value="Hard">Hard</option>
@@ -512,6 +516,7 @@ Explain clearly in simple terms. Include a short example if useful.
 // Practice Mode
 async function generatePracticeQuestions(){ gtag('event','practice_mode_used');
   const subject = document.getElementById("practiceSubject").value;
+  const topic = document.getElementById("practiceTopic").value;                           
   const difficulty = document.getElementById("practiceDifficulty").value;
   const box = document.getElementById("practiceOutput");
 
@@ -525,6 +530,9 @@ Generate 5 questions.
 
 Subject: ${subject}
 Difficulty: ${difficulty}
+Topic: ${topic}
+
+If topic is "All", mix concepts.
 `;
 
   const r = await fetch("https://smart-backend-82s8.onrender.com/api/chat",{
@@ -722,7 +730,23 @@ loadSaved();
 // 🔥 Trigger Home logic once on initial load
 const firstHomeTab = document.querySelector(".nav-item");
 switchPage("home", firstHomeTab);
+const subjectSelect = document.getElementById("practiceSubject");
+const topicSelect = document.getElementById("practiceTopic");
 
+function updateTopics() {
+  const subject = subjectSelect.value;
+  const topics = topicMap[subject];
+
+  topicSelect.innerHTML = topics
+    .map(t => `<option value="${t}">${t}</option>`)
+    .join("");
+}
+
+// Run once + on change
+if(subjectSelect){
+  subjectSelect.addEventListener("change", updateTopics);
+  updateTopics();
+}
 function toggleUnitConverter(){
   const box = document.getElementById("unitConverterBox");
   box.style.display = box.style.display === "none" ? "block" : "none";
@@ -1028,6 +1052,12 @@ if(insights.length < 5){
   document.getElementById("appliedInput").value = insight;
   appliedScienceExplain();
 }
+  const topicMap = {
+  Chemistry: ["All", "Thermodynamics", "Equilibrium", "Organic Reactions"],
+  Physics: ["All", "Kinematics", "Laws of Motion", "Thermodynamics"],
+  Biology: ["All", "Cell Structure", "Genetics", "Human Physiology"]
+};
+
 </script>
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSd8v7hIEvgaOMsp5l_egxC9mYg5_tl6N87i6OcLd9lPoEKoTA/viewform"
    target="_blank"
