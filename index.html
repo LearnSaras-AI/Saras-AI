@@ -731,23 +731,32 @@ loadSaved();
 // 🔥 Trigger Home logic once on initial load
 const firstHomeTab = document.querySelector(".nav-item");
 switchPage("home", firstHomeTab);
-const subjectSelect = document.getElementById("practiceSubject");
-const topicSelect = document.getElementById("practiceTopic");
+document.addEventListener("DOMContentLoaded", () => {
 
-function updateTopics() {
-  const subject = subjectSelect.value;
-  const topics = topicMap[subject];
+  const topicMap = {
+    Chemistry: ["All", "Thermodynamics", "Equilibrium", "Organic Reactions"],
+    Physics: ["All", "Kinematics", "Laws of Motion", "Thermodynamics"],
+    Biology: ["All", "Cell Structure", "Genetics", "Human Physiology"]
+  };
 
-  topicSelect.innerHTML = topics
-    .map(t => `<option value="${t}">${t}</option>`)
-    .join("");
-}
+  const subjectSelect = document.getElementById("practiceSubject");
+  const topicSelect = document.getElementById("practiceTopic");
 
-// Run once + on change
-if(subjectSelect){
-  subjectSelect.addEventListener("change", updateTopics);
-  updateTopics();
-}
+  function updateTopics() {
+    const subject = subjectSelect.value;
+    const topics = topicMap[subject] || ["All"];
+
+    topicSelect.innerHTML = topics
+      .map(t => `<option value="${t}">${t}</option>`)
+      .join("");
+  }
+
+  if(subjectSelect && topicSelect){
+    subjectSelect.addEventListener("change", updateTopics);
+    updateTopics();
+  }
+
+});
 function toggleUnitConverter(){
   const box = document.getElementById("unitConverterBox");
   box.style.display = box.style.display === "none" ? "block" : "none";
