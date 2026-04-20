@@ -53,7 +53,7 @@ button:hover{background:#1a252f;}
     font-size: 15px;
 }
 
-.{
+.section{
   background:white;
   padding:14px;
   border-left:4px solid #6366f1;
@@ -340,16 +340,6 @@ let currentInsights = [];
   // 🌐 Language Setup
 document.addEventListener("DOMContentLoaded", () => {
   const langSelect = document.getElementById("languageSelect");
-
-  const savedLang = localStorage.getItem("lang") || "English";
-
-  if(langSelect){
-    langSelect.value = savedLang;
-
-    langSelect.addEventListener("change", () => {
-      localStorage.setItem("lang", langSelect.value);
-    });
-  }
 });
 // Load saved language
 const savedLang = localStorage.getItem("lang") || "English";
@@ -371,8 +361,7 @@ if(pg === "applied"){
   if(pg === "practice"){
   setTimeout(updateTopics, 50);
  }
-}
-
+  
   // ✅ Show manifesto ONLY when Home becomes active
   if (pg === "home" && !sessionStorage.getItem("manifestoShown")) {
     setTimeout(() => {
@@ -729,40 +718,24 @@ function deleteSavedItem(type, index){
 }
   
 loadSaved();
-  document.addEventListener("DOMContentLoaded", () => {
+
+document.addEventListener("DOMContentLoaded", () => {
+  // 🌐 Language
   const lang = localStorage.getItem("lang") || "English";
   const el = document.getElementById("currentLang");
   if(el) el.innerText = lang;
+
+  // 🔥 Topic init
+  updateTopics();
+
+  const subjectSelect = document.getElementById("practiceSubject");
+  if(subjectSelect){
+    subjectSelect.addEventListener("change", updateTopics);
+  }
 });
 // 🔥 Trigger Home logic once on initial load
 const firstHomeTab = document.querySelector(".nav-item");
 switchPage("home", firstHomeTab);
-document.addEventListener("DOMContentLoaded", () => {
-
-  const topicMap = {
-    Chemistry: ["All", "Thermodynamics", "Equilibrium", "Organic Reactions"],
-    Physics: ["All", "Kinematics", "Laws of Motion", "Thermodynamics"],
-    Biology: ["All", "Cell Structure", "Genetics", "Human Physiology"]
-  };
-
-  const subjectSelect = document.getElementById("practiceSubject");
-  const topicSelect = document.getElementById("practiceTopic");
-
-  function updateTopics() {
-    const subject = subjectSelect.value;
-    const topics = topicMap[subject] || ["All"];
-
-    topicSelect.innerHTML = topics
-      .map(t => `<option value="${t}">${t}</option>`)
-      .join("");
-  }
-
-  if(subjectSelect && topicSelect){
-    subjectSelect.addEventListener("change", updateTopics);
-    updateTopics();
-  }
-
-});
 
   function updateTopics() {
   const topicMap = {
@@ -864,11 +837,6 @@ function saveToHistory(question, answer){
 
   localStorage.setItem("todayHistory", JSON.stringify(history));
   loadSaved();
-  document.addEventListener("DOMContentLoaded", () => {
-  updateTopics();
-});
-  document.getElementById("practiceSubject")
-  .addEventListener("change", updateTopics);
 }
   async function deepDiveExplain(){
   const input = document.getElementById("deepInput").value.trim();
@@ -1101,22 +1069,6 @@ if(insights.length < 5){
   document.getElementById("appliedInput").value = insight;
   appliedScienceExplain();
 }
-  const topicMap = {
-  Chemistry: ["All", "Thermodynamics", "Equilibrium", "Organic Reactions"],
-  Physics: ["All", "Kinematics", "Laws of Motion", "Thermodynamics"],
-  Biology: ["All", "Cell Structure", "Genetics", "Human Physiology"]
-};
-
-async function loadResearchPapers(){
-  const box = document.getElementById("researchBox");
-
-  const topic = document.getElementById("appliedInput").value.trim();
-  const language = localStorage.getItem("lang") || "English";
-
-  if(!topic){
-    box.innerHTML = "⚠️ No topic found.";
-    return;
-  }
 
   box.innerHTML = `<div class="typing">🔬 Finding research papers...</div>`;
 
