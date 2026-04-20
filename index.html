@@ -53,7 +53,7 @@ button:hover{background:#1a252f;}
     font-size: 15px;
 }
 
-.section{
+.{
   background:white;
   padding:14px;
   border-left:4px solid #6366f1;
@@ -134,7 +134,7 @@ margin-bottom:15px;
 <!-- HOME -->
 <div id="page-home" class="page" style="display:block;">
 <div id="manifestoBox" style="display:none;">
-  <div class="section" style="border-left-color:#10b981;">
+  <div class="" style="border-left-color:#10b981;">
     <strong>📘 A note before you begin</strong>
     <p>
       Books are limited, the world is not — explore beyond them.<br>
@@ -171,7 +171,7 @@ margin-bottom:15px;
 </button>
 
 <div id="detailedAnswer" style="margin-top:10px;"></div>
-<div class="section" id="adPlaceholder" style="display:none; opacity:0.6; font-size:14px;">
+<div class="" id="adPlaceholder" style="display:none; opacity:0.6; font-size:14px;">
   
 </div>
 
@@ -944,11 +944,18 @@ Do NOT include instructions. Start directly from explanation.
   `<h3>$1</h3>`
 );
 
-    result.innerHTML = `
-      <div class="section">
-        ${html}
-      </div>
-    `;
+result.innerHTML = `
+  <div class="section">
+    ${html}
+
+    <button onclick="loadResearchPapers()" 
+      style="margin-top:12px; background:#6366f1;">
+      📚 Explore Research
+    </button>
+
+    <div id="researchBox" style="margin-top:10px;"></div>
+  </div>
+`;
 
   }catch{
     result.innerHTML = "Error loading applications ❌";
@@ -1067,6 +1074,57 @@ if(insights.length < 5){
   Physics: ["All", "Kinematics", "Laws of Motion", "Thermodynamics"],
   Biology: ["All", "Cell Structure", "Genetics", "Human Physiology"]
 };
+
+async function loadResearchPapers(){
+  const box = document.getElementById("researchBox");
+
+  const topic = document.getElementById("appliedInput").value.trim();
+  const language = localStorage.getItem("lang") || "English";
+
+  if(!topic){
+    box.innerHTML = "⚠️ No topic found.";
+    return;
+  }
+
+  box.innerHTML = `<div class="typing">🔬 Finding research papers...</div>`;
+
+  const prompt = `
+Topic: ${topic}
+Language: ${language}
+
+Give 2 beginner-friendly research papers.
+
+For each:
+- Title
+- 1-line why it matters
+- Link (prefer Google Scholar or arXiv)
+
+Keep it short and clear.
+`;
+
+  try{
+    const r = await fetch("https://smart-backend-82s8.onrender.com/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:prompt})
+    });
+
+    const j = await r.json();
+    let raw = j.reply || "No response.";
+
+    let html = marked.parse(raw);
+
+    box.innerHTML = `
+      <div class="section">
+        <h3>📚 Research Papers</h3>
+        ${html}
+      </div>
+    `;
+
+  }catch{
+    box.innerHTML = "Error loading research ❌";
+  }
+}
 
 </script>
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSd8v7hIEvgaOMsp5l_egxC9mYg5_tl6N87i6OcLd9lPoEKoTA/viewform"
