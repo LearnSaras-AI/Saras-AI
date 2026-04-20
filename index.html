@@ -368,7 +368,11 @@ function switchPage(pg, el){
 if(pg === "applied"){
     loadScienceInsights();
   }
-  
+  if(pg === "practice"){
+  setTimeout(updateTopics, 50);
+ }
+}
+
   // ✅ Show manifesto ONLY when Home becomes active
   if (pg === "home" && !sessionStorage.getItem("manifestoShown")) {
     setTimeout(() => {
@@ -581,6 +585,8 @@ if (window.MathJax) {
 }
 
 }
+
+  
 function sendToTutor(btn){
   const section = btn.closest(".section");
 
@@ -757,6 +763,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+  function updateTopics() {
+  const topicMap = {
+    Chemistry: ["All", "Thermodynamics", "Equilibrium", "Organic Reactions"],
+    Physics: ["All", "Kinematics", "Laws of Motion", "Thermodynamics"],
+    Biology: ["All", "Cell Structure", "Genetics", "Human Physiology"]
+  };
+
+  const subjectSelect = document.getElementById("practiceSubject");
+  const topicSelect = document.getElementById("practiceTopic");
+
+  if (!subjectSelect || !topicSelect) return;
+
+  const subject = subjectSelect.value;
+  const topics = topicMap[subject] || ["All"];
+
+  topicSelect.innerHTML = topics
+    .map(t => `<option value="${t}">${t}</option>`)
+    .join("");
+}
+  
 function toggleUnitConverter(){
   const box = document.getElementById("unitConverterBox");
   box.style.display = box.style.display === "none" ? "block" : "none";
@@ -837,6 +864,11 @@ function saveToHistory(question, answer){
 
   localStorage.setItem("todayHistory", JSON.stringify(history));
   loadSaved();
+  document.addEventListener("DOMContentLoaded", () => {
+  updateTopics();
+});
+  document.getElementById("practiceSubject")
+  .addEventListener("change", updateTopics);
 }
   async function deepDiveExplain(){
   const input = document.getElementById("deepInput").value.trim();
