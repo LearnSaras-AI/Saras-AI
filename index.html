@@ -134,7 +134,7 @@ margin-bottom:15px;
 <!-- HOME -->
 <div id="page-home" class="page" style="display:block;">
 <div id="manifestoBox" style="display:none;">
-  <div class="" style="border-left-color:#10b981;">
+  <div class="section" style="border-left-color:#10b981;">
     <strong>📘 A note before you begin</strong>
     <p>
       Books are limited, the world is not — explore beyond them.<br>
@@ -338,18 +338,8 @@ margin-bottom:15px;
 let currentQuestion = "";
 let currentInsights = [];
   // 🌐 Language Setup
-document.addEventListener("DOMContentLoaded", () => {
-  const langSelect = document.getElementById("languageSelect");
-});
-// Load saved language
-const savedLang = localStorage.getItem("lang") || "English";
-if(langSelect){
-  langSelect.value = savedLang;
 
-  langSelect.addEventListener("change", () => {
-    localStorage.setItem("lang", langSelect.value);
-  });
-}
+
 function switchPage(pg, el){
   document.querySelectorAll(".page").forEach(p => p.style.display = "none");
   document.getElementById("page-" + pg).style.display = "block";
@@ -723,9 +713,21 @@ loadSaved();
 
 document.addEventListener("DOMContentLoaded", () => {
   // 🌐 Language
-  const lang = localStorage.getItem("lang") || "English";
+  const langSelect = document.getElementById("languageSelect");
+  const savedLang = localStorage.getItem("lang") || "English";
+
+if(langSelect){
+  langSelect.value = savedLang;
+
   const el = document.getElementById("currentLang");
-  if(el) el.innerText = lang;
+  if(el) el.innerText = savedLang;
+
+  langSelect.addEventListener("change", () => {
+    localStorage.setItem("lang", langSelect.value);
+
+    if(el) el.innerText = langSelect.value;
+  });
+}
 
   // 🔥 Topic init
   updateTopics();
@@ -734,10 +736,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if(subjectSelect){
     subjectSelect.addEventListener("change", updateTopics);
   }
+
+  // 🔥 INITIAL PAGE LOAD (MOVE HERE)
+  const firstHomeTab = document.querySelector(".nav-item");
+  if(firstHomeTab){
+    switchPage("home", firstHomeTab);
+  }
 });
-// 🔥 Trigger Home logic once on initial load
-const firstHomeTab = document.querySelector(".nav-item");
-switchPage("home", firstHomeTab);
 
   function updateTopics() {
   const topicMap = {
@@ -1071,6 +1076,17 @@ if(insights.length < 5){
   document.getElementById("appliedInput").value = insight;
   appliedScienceExplain();
 }
+
+ async function loadResearchPapers(){
+  const box = document.getElementById("researchBox");
+
+  const topic = document.getElementById("appliedInput").value.trim();
+  const language = localStorage.getItem("lang") || "English";
+
+  if(!topic){
+    box.innerHTML = "⚠️ No topic found.";
+    return;
+  }
 
   box.innerHTML = `<div class="typing">🔬 Finding research papers...</div>`;
 
