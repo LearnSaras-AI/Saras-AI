@@ -355,14 +355,16 @@ function switchPage(pg, el){
   document.getElementById("page-" + pg).style.display = "block";
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   el.classList.add("active");
-if(pg === "applied"){
+
+  if(pg === "applied"){
     loadScienceInsights();
   }
+
   if(pg === "practice"){
-  setTimeout(updateTopics, 50);
- }
-  
-  // ✅ Show manifesto ONLY when Home becomes active
+    setTimeout(updateTopics, 50);
+  }
+
+  // Show manifesto
   if (pg === "home" && !sessionStorage.getItem("manifestoShown")) {
     setTimeout(() => {
       const m = document.getElementById("manifestoBox");
@@ -370,14 +372,15 @@ if(pg === "applied"){
       sessionStorage.setItem("manifestoShown", "yes");
     }, 50);
   }
-  // ✅ Show Practice note only once per session
-if (pg === "practice" && !sessionStorage.getItem("practiceNoteShown")) {
-  setTimeout(() => {
-    const p = document.getElementById("practiceNote");
-    if (p) p.style.display = "block";
-    sessionStorage.setItem("practiceNoteShown", "yes");
-  }, 50);
- }
+
+  // Show practice note
+  if (pg === "practice" && !sessionStorage.getItem("practiceNoteShown")) {
+    setTimeout(() => {
+      const p = document.getElementById("practiceNote");
+      if (p) p.style.display = "block";
+      sessionStorage.setItem("practiceNoteShown", "yes");
+    }, 50);
+  }
 }
 // Cleaner (safe for tables)
 function cleanChemistry(txt){
@@ -386,7 +389,6 @@ function cleanChemistry(txt){
     .replace(/\\to|\\rightarrow/g,"→")
     .replace(/([A-Za-z])_([0-9])/g,(m,a,d)=>a+"₀₁₂₃₄₅₆₇₈₉"[d]);
 }
-
 // Physics & math symbol normalizer (safe, no tables)
 function fixPhysicsSymbols(txt){
   return txt
