@@ -1113,6 +1113,7 @@ Keep it short and clear.
     let raw = j.reply || "No response.";
 
     let html = marked.parse(raw);
+    html = html.replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ');
 
     box.innerHTML = `
       <div class="section">
