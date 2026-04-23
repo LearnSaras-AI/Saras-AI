@@ -909,39 +909,41 @@ Subject: ${subject}
 Topic: ${input}
 Language: ${language}
 
-Explain visually and clearly.
+Return ONLY valid HTML.
 
-Use this exact structure:
+Use EXACTLY this structure:
 
 <div class="visual-card">
 <h3>📌 Concept</h3>
-Short explanation
+Explain the concept simply.
 </div>
 
 <div class="flow-box">
-Step 1 → Step 2 → Step 3
+Main process flow using arrows →
 </div>
 
 <div class="visual-card">
 <h3>⚙️ Mechanism</h3>
-Step-by-step explanation
+Explain step-by-step mechanism.
 </div>
 
 <div class="highlight-box">
-Important formula / key point
+Important formula, rule, or key point.
 </div>
 
 <div class="visual-card">
 <h3>⚠️ Common Mistakes</h3>
-Common student mistakes
+Common student mistakes.
 </div>
 
 <div class="visual-card">
 <h3>🎯 Exam Tips</h3>
-Quick scoring tips
+Quick exam/revision tips.
 </div>
 
-Keep output clean HTML only. Do NOT include instructions. Start directly from explanation.
+NO markdown.
+NO Question/Answer labels.
+NO explanations outside HTML.
 `;
 
   try{
@@ -956,6 +958,7 @@ Keep output clean HTML only. Do NOT include instructions. Start directly from ex
 
     raw = cleanChemistry(raw);
     raw = fixPhysicsSymbols(raw);
+    raw = raw.replace(/```html|```/g, "");
     raw = raw.replace(/<script.*?>.*?<\/script>/gi, "");
     raw = raw.replace(/on\w+=".*?"/g, "");
    let html = raw;
