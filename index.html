@@ -954,12 +954,12 @@ Keep output clean HTML only. Do NOT include instructions. Start directly from ex
     raw = raw.replace(/<script.*?>.*?<\/script>/gi, "");
     raw = raw.replace(/on\w+=".*?"/g, "");
    let html = raw;
-    result.innerHTML = `
-      <div class="section">
-        <h2>🌊 Deep Dive</h2>
-        ${html}
-      </div>
-    `;
+result.innerHTML = `
+  <div class="section">
+    <h2>🌊 Deep Dive</h2>
+    ${html}
+  </div>
+`;
 
   }catch{
     result.innerHTML = "Error in Deep Dive ❌";
