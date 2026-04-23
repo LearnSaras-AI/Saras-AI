@@ -959,9 +959,9 @@ Keep output clean HTML only. Do NOT include instructions. Start directly from ex
 
     raw = cleanChemistry(raw);
     raw = fixPhysicsSymbols(raw);
-
+    raw = raw.replace(/<script.*?>.*?<\/script>/gi, "");
+    raw = raw.replace(/on\w+=".*?"/g, "");
    let html = raw;
-
     result.innerHTML = `
       <div class="section">
         <h2>🌊 Deep Dive</h2>
