@@ -7,7 +7,7 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
+de
   gtag('config', 'G-F84RVV7QVK');
 </script>
 <meta charset="UTF-8">
@@ -908,45 +908,56 @@ const result = document.getElementById("deepResult");
 const language = localStorage.getItem("lang") || "English";
 
 const prompt = `
-Subject: ${subject}
+Return ONLY valid HTML.
+
 Topic: ${input}
+Subject: ${subject}
 Language: ${language}
 
-Return ONLY valid HTML.
+STRICT RULES:
+- Do NOT write Question:
+- Do NOT write Topic:
+- Do NOT write Correct Answer:
+- Do NOT use markdown
+- Do NOT explain outside HTML
+- Start directly with HTML
+- Use short sections
 
 Use EXACTLY this structure:
 
 <div class="visual-card">
 <h3>📌 Concept</h3>
-Explain the concept simply.
+<p>Explain concept simply.</p>
 </div>
 
 <div class="flow-box">
-Main process flow using arrows →
+Step 1 → Step 2 → Step 3
 </div>
 
 <div class="visual-card">
 <h3>⚙️ Mechanism</h3>
-Explain step-by-step mechanism.
+<p>Step-by-step explanation.</p>
 </div>
 
 <div class="highlight-box">
-Important formula, rule, or key point.
+Important formula or key idea.
 </div>
 
 <div class="visual-card">
 <h3>⚠️ Common Mistakes</h3>
-Common student mistakes.
+<ul>
+<li>Mistake 1</li>
+<li>Mistake 2</li>
+</ul>
 </div>
 
 <div class="visual-card">
 <h3>🎯 Exam Tips</h3>
-Quick exam/revision tips.
+<ul>
+<li>Tip 1</li>
+<li>Tip 2</li>
+</ul>
 </div>
-
-NO markdown.
-NO Question/Answer labels.
-NO explanations outside HTML.
 `;
 
   try{
