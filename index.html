@@ -908,56 +908,32 @@ const result = document.getElementById("deepResult");
 const language = localStorage.getItem("lang") || "English";
 
 const prompt = `
-Return ONLY valid HTML.
-
-Topic: ${input}
 Subject: ${subject}
+Topic: ${input}
 Language: ${language}
 
-STRICT RULES:
-- Do NOT write Question:
-- Do NOT write Topic:
-- Do NOT write Correct Answer:
-- Do NOT use markdown
-- Do NOT explain outside HTML
-- Start directly with HTML
-- Use short sections
+Provide a deep explanation using this structure:
 
-Use EXACTLY this structure:
+## 📌 Concept
+Explain deeply in simple language with intuition and examples.
 
-<div class="visual-card">
-<h3>📌 Concept</h3>
-<p>Explain concept simply.</p>
-</div>
+## ⚙️ Mechanism
+Explain step-by-step process clearly.
 
-<div class="flow-box">
-Step 1 → Step 2 → Step 3
-</div>
+## 🧠 Reasoning
+Explain WHY each step happens.
 
-<div class="visual-card">
-<h3>⚙️ Mechanism</h3>
-<p>Step-by-step explanation.</p>
-</div>
+## 📊 Kinetics / Important Principles
+Include formulas, conditions, rates, or governing ideas.
 
-<div class="highlight-box">
-Important formula or key idea.
-</div>
+## ⚠️ Common Mistakes
+List common misconceptions students make.
 
-<div class="visual-card">
-<h3>⚠️ Common Mistakes</h3>
-<ul>
-<li>Mistake 1</li>
-<li>Mistake 2</li>
-</ul>
-</div>
+## 🎯 Exam Tips
+Give smart revision and scoring tips.
 
-<div class="visual-card">
-<h3>🎯 Exam Tips</h3>
-<ul>
-<li>Tip 1</li>
-<li>Tip 2</li>
-</ul>
-</div>
+Keep explanations detailed but readable.
+Avoid giant paragraphs.
 `;
 
   try{
@@ -975,7 +951,7 @@ Important formula or key idea.
     raw = raw.replace(/```html|```/g, "");
     raw = raw.replace(/<script.*?>.*?<\/script>/gi, "");
     raw = raw.replace(/on\w+=".*?"/g, "");
-   let html = raw;
+   let html = marked.parse(raw);
 result.innerHTML = `
   <div class="section">
     <h2>🌊 Deep Dive</h2>
